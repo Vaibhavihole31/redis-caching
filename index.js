@@ -41,7 +41,7 @@ app.post('/student', async(req, res) => {
     })
 })
 
-app.get('/student', async(req, res) => {
+app.get('/students', async(req, res) => {
     const students = await Student.find();
 
     res.json({
@@ -50,6 +50,26 @@ app.get('/student', async(req, res) => {
         data: students
     })
 })
+
+app.get('/student', async (req, res) => {
+    const { email } = req.query;
+  
+    const student = await Student.findOne({ email });
+  
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: "Student not found",
+        data: null
+      });
+    }
+  
+    res.json({
+      success: true,
+      message: "Student found successfully",
+      data: student
+    });
+});  
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT} 🚀`);
