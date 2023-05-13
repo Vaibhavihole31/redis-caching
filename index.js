@@ -41,6 +41,16 @@ app.post('/student', async(req, res) => {
     })
 })
 
+app.get('/student', async(req, res) => {
+    const students = await Student.find();
+
+    res.json({
+        success: true,
+        message: "Students fetched successfully",
+        data: students
+    })
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT} 🚀`);
 });
