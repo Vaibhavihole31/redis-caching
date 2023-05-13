@@ -16,6 +16,10 @@ try {
     console.log(`❌ Error:  ${err?.message}`);
 }
 
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK' });
+})
+
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT} 🚀`);
 });
