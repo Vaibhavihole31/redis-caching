@@ -1,10 +1,14 @@
 import { createClient } from 'redis';
 
+import dotennv from 'dotenv';
+
+dotennv.config();
+
 const client = createClient({
-    password: process.env.CACHE_PASSWORD,
+    password: process.env.REDIS_PASSWORD,
     socket: {
-        host: process.env.HOST,
-        port: 17492
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
     }
 });
 

@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotennv from 'dotenv';
 
 import Student from './models/Students.js'
+import { createCache, getCache, flushCache } from './util/cache.js';
 
 dotennv.config();
 const app = express();
@@ -19,10 +20,11 @@ try {
 }
 
 app.get('/health', (req, res) => {
+    flushCache();
     res.status(200).json({ status: 'OK' });
 })
 
-app.post('/student', async(req, res) => {
+app.post('/student', async (req, res) => {
     const { fullName, email, password, mobile } = req.body;
 
     const student = new Student({
@@ -33,6 +35,7 @@ app.post('/student', async(req, res) => {
     })
 
     const savedStudent = await student.save();
+    flushCache();
 
     res.json({
         success: true,
@@ -41,8 +44,17 @@ app.post('/student', async(req, res) => {
     })
 })
 
-app.get('/students', async(req, res) => {
-    const students = await Student.find();
+app.get('/students', async (req, res) => {
+    let students = [];
+
+    const studentsFromRedis = await getCache('students');
+    if (studentsFromRedis) {
+        students = studentsFromRedis;
+    }
+    else {
+        students = await Student.find();
+        await createCache('students', students);
+    }
 
     res.json({
         success: true,
@@ -50,26 +62,6 @@ app.get('/students', async(req, res) => {
         data: students
     })
 })
-
-app.get('/student', async (req, res) => {
-    const { email } = req.query;
-  
-    const student = await Student.findOne({ email });
-  
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        message: "Student not found",
-        data: null
-      });
-    }
-  
-    res.json({
-      success: true,
-      message: "Student found successfully",
-      data: student
-    });
-});  
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT} 🚀`);
