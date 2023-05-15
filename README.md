@@ -12,24 +12,6 @@ To install node-redis, simply:
 npm install redis
 ```
 
-## Usage
-
-Basic Example
-
-```js 
-import { createClient } from 'redis';
-
-const client = createClient();
-
-client.on('error', err => console.log('Redis Client Error', err));
-
-await client.connect();
-
-await client.set('key', 'value');
-const value = await client.get('key');
-await client.sendCommand(['key']);
-```
-
 ## Documentaion
 
 [Node-Redis](https://www.npmjs.com/package/redis)
