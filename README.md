@@ -16,6 +16,8 @@ npm install redis
 
 [Node-Redis](https://www.npmjs.com/package/redis)
 
+[Redis](https://medium.com/@juwelariful1/what-is-redis-and-why-with-use-case-1b294b91e373)
+
 ## Caching vs. Non-Caching: API Response Time Comparison
 
 In this section, we'll compare the API response times with and without caching implemented using Redis. The screenshots below demonstrate the significant performance improvements achieved through caching.
